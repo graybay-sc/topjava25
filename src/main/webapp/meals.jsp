@@ -28,7 +28,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
-<p><a href="index.html">Add meal</a></p>
+<p><a href="meals?action=add">Add meal</a></p>
 <table>
     <tr>
         <th>Date</th>
@@ -44,8 +44,8 @@
             <td>${f:formatLocalDateTime(meal.dateTime)}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
-            <td><a href="index.html">Update</a></td>
-            <td><a href="index.html">Delete</a></td>
+            <td><a href="meals?action=update&mealId=${meal.id}">Update</a></td>
+            <td><a href="meals?action=delete&mealId=${meal.id}">Delete</a></td>
         </tr>
     </c:forEach>
 </table>
