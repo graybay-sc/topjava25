@@ -28,7 +28,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
+/*        request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
 
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
@@ -38,12 +38,12 @@ public class MealServlet extends HttpServlet {
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
         repository.save(meal);
-        response.sendRedirect("meals");
+        response.sendRedirect("meals");*/
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
+/*        String action = request.getParameter("action");
 
         switch (action == null ? "all" : action) {
             case "delete":
@@ -67,7 +67,7 @@ public class MealServlet extends HttpServlet {
                         MealsUtil.getTos(repository.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
-        }
+        }*/
     }
 
     private int getId(HttpServletRequest request) {
