@@ -15,8 +15,9 @@ import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 @NamedQueries({
         @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
         @NamedQuery(name = User.BY_EMAIL, query = "SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=?1"),
-        @NamedQuery(name = User.ALL_SORTED, query = "SELECT u FROM User u LEFT JOIN FETCH u.roles ORDER BY u.name, u.email"),
+        @NamedQuery(name = User.ALL_SORTED, query = "SELECT u FROM User u LEFT JOIN FETCH u.roles ORDER BY u.name, u.email")
 })
+@NamedEntityGraph(name = User.GET_WITH_MEALS, attributeNodes = {@NamedAttributeNode("meals"), @NamedAttributeNode("roles")})
 @Entity
 @Table(name = "users")
 public class User extends AbstractNamedEntity {
@@ -24,6 +25,7 @@ public class User extends AbstractNamedEntity {
     public static final String DELETE = "User.delete";
     public static final String BY_EMAIL = "User.getByEmail";
     public static final String ALL_SORTED = "User.getAllSorted";
+    public static final String GET_WITH_MEALS = "User.getWithMeals";
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
@@ -53,6 +55,10 @@ public class User extends AbstractNamedEntity {
     @Column(name = "calories_per_day", nullable = false, columnDefinition = "int default 2000")
     @Range(min = 10, max = 10000)
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OrderBy("dateTime desc")
+    private List<Meal> meals;
 
     public User() {
     }
@@ -123,15 +129,23 @@ public class User extends AbstractNamedEntity {
         return password;
     }
 
+    public List<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", email=" + email +
-                ", name=" + name +
-                ", enabled=" + enabled +
-                ", roles=" + roles +
-                ", caloriesPerDay=" + caloriesPerDay +
-                '}';
+               "id=" + id +
+               ", email=" + email +
+               ", name=" + name +
+               ", enabled=" + enabled +
+               ", roles=" + roles +
+               ", caloriesPerDay=" + caloriesPerDay +
+               '}';
     }
 }
