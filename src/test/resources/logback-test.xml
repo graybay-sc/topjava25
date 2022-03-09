@@ -29,4 +29,7 @@
         <appender-ref ref="console"/>
     </root>
 
+    <!--Debug transactions-->
+    <logger name="org.springframework.orm.jpa" level="debug"/>
+
 </configuration>
