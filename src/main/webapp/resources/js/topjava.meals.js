@@ -39,3 +39,14 @@ $(function () {
         })
     );
 });
+
+function filter() {
+    form = $('#filter')
+    $.ajax({
+        type: "GET",
+        url: ctx.ajaxUrl + "filter/",
+        data: form.serialize()
+    }).done(function (data) {
+        ctx.datatableApi.clear().rows.add(data).draw();
+    })
+}

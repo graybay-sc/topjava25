@@ -1,4 +1,5 @@
 const userAjaxUrl = "admin/users/";
+const userRestUrl = "rest/admin/users/";
 
 // https://stackoverflow.com/a/5064235/548473
 const ctx = {
@@ -7,41 +8,51 @@ const ctx = {
 
 // $(document).ready(function () {
 $(function () {
-    makeEditable(
-        $("#datatable").DataTable({
-            "paging": false,
-            "info": true,
-            "columns": [
-                {
-                    "data": "name"
-                },
-                {
-                    "data": "email"
-                },
-                {
-                    "data": "roles"
-                },
-                {
-                    "data": "enabled"
-                },
-                {
-                    "data": "registered"
-                },
-                {
-                    "defaultContent": "Edit",
-                    "orderable": false
-                },
-                {
-                    "defaultContent": "Delete",
-                    "orderable": false
-                }
-            ],
-            "order": [
-                [
-                    0,
-                    "asc"
-                ]
+    let datatable = $("#datatable").DataTable({
+        "paging": false,
+        "info": true,
+        "columns": [
+            {
+                "data": "name"
+            },
+            {
+                "data": "email"
+            },
+            {
+                "data": "roles"
+            },
+            {
+                "data": "enabled"
+            },
+            {
+                "data": "registered"
+            },
+            {
+                "defaultContent": "Edit",
+                "orderable": false
+            },
+            {
+                "defaultContent": "Delete",
+                "orderable": false
+            }
+        ],
+        "order": [
+            [
+                0,
+                "asc"
             ]
-        })
-    );
+        ]
+    })
+    makeEditable(datatable);
+    $(".enable").click(function () {
+        let id = $(this).closest('tr').attr("id");
+        let enabled = $(this).closest('input').is(":checked");
+        $.ajax({
+            type: "PATCH",
+            url: userRestUrl + id + "/?enabled=" + enabled
+        }).done(function () {
+            updateTable();
+            successNoty("Saved");
+        });
+    });
 });
