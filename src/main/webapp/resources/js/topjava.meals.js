@@ -1,5 +1,30 @@
 const mealAjaxUrl = "profile/meals/";
 
+jQuery('#startDate').datetimepicker({
+    timepicker:false,
+    format:'Y-m-d'
+});
+
+jQuery('#startTime').datetimepicker({
+    datepicker:false,
+    format:'H:i'
+});
+
+jQuery('#endDate').datetimepicker({
+    timepicker:false,
+    format:'Y-m-d'
+});
+
+jQuery('#endTime').datetimepicker({
+    datepicker:false,
+    format:'H:i'
+});
+
+jQuery('#dateTime').datetimepicker({
+    format:'Y-m-d H:i'
+});
+
+
 // https://stackoverflow.com/a/5064235/548473
 const ctx = {
     ajaxUrl: mealAjaxUrl,
