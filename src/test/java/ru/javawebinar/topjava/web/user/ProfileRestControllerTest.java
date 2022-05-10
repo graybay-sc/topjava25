@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.to.UserTo;
@@ -12,6 +14,7 @@ import ru.javawebinar.topjava.util.UserUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -62,6 +65,18 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         newUser.setId(newId);
         USER_MATCHER.assertMatch(created, newUser);
         USER_MATCHER.assertMatch(userService.get(newId), newUser);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void registerDuplicate() throws Exception {
+        UserTo newTo = new UserTo(null, "newName", "guest@gmail.com", "newPassword", 1500);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(content().string(containsString("User with this email already exists")));
     }
 
     @Test
